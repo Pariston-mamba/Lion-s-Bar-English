@@ -1,20 +1,10 @@
 # Lion's Bar Bot
 
-A Discord bot for playing a bluffing card game inspired by the classic bar game *Liar's Bar*.
-Players take turns playing cards and claiming a rank — bluff your way through, or challenge the liar!
+Lion's Bar is a Discord bluffing card party game for 2-6 players.
 
-## File Structure
+Players create a room, join with buttons, view private hands, play cards, challenge bluffs, lose HP, and fight to be the last player standing.
 
-```
-lionsbar-bot/
-├── bot.py          # Main entry point
-├── cog.py          # Discord slash commands & button logic
-├── game.py         # Core game logic and data structures
-├── formatter.py    # ANSI colour formatting helpers
-├── views.py        # Discord UI button components
-├── requirements.txt
-└── .env            # Local development only (do NOT upload to GitHub)
-```
+This version supports English and Chinese.
 
 ## Commands
 
@@ -23,45 +13,82 @@ lionsbar-bot/
 | `/create` | Create a new Lion's Bar room |
 | `/stop` | Force end the current game |
 | `/reset` | Reset a stuck or broken game |
-| `/status` | View current HP standings |
+| `/status` | View current HP and turn status |
 | `/rules` | View detailed game rules |
 | `/help` | Show all available commands |
+| `/language` | Set language to Auto, English, or Chinese |
 
-## How to Play
+## Language
 
-1. `/create` — open a room
-2. Players click **Join Game** (2–6 players supported)
-3. Any player clicks **Start Game**
-4. On your turn: select cards → confirm → claim they are all the table rank
-5. The next player chooses **Challenge** or **Pass & Play**
-6. Caught bluffing → the liar loses 1 HP; failed challenge → the challenger loses 1 HP
-7. Last player standing wins!
+Use:
+
+```txt
+/language
+```
+
+Options:
+
+```txt
+Auto
+English
+中文
+```
+
+Auto mode uses the room creator's Discord language for public game messages.
+Private replies, such as hand viewing and error messages, follow the clicking user's Discord language.
+
+## How To Play
+
+1. Use `/create` to open a room.
+2. Players click **Join Game**.
+3. Start the game when 2-6 players have joined.
+4. Each round has a table rank, such as A, K, or Q.
+5. On your turn, play 1-3 cards and claim they match the table rank.
+6. The next player may **Challenge** or **Pass & Play**.
+7. If the played cards do not match the table rank, the player who bluffed loses 1 HP.
+8. If the challenge is wrong, the challenger loses 1 HP.
+9. After a challenge, a new round begins with fresh hands.
+10. The last player alive wins.
 
 ## Card Rules
 
 | Rank | Copies |
 |------|--------|
-| A    | 10     |
-| K    | 10     |
-| Q    | 10     |
-| Joker | 2 (wild) |
-| **Total** | **32** |
+| A | 10 |
+| K | 10 |
+| Q | 10 |
+| Joker | 2 wild cards |
+| Total | 32 |
 
-- Starting hand: **5 cards** per player
-- Starting HP: **5 ♥** per player
-- Max cards played per turn: **3**
+- Starting hand: 5 cards per player
+- Starting HP: 5
+- Max cards played per turn: 3
 - New cards are dealt after every challenge
+
+## Files
+
+```txt
+bot.py
+cog.py
+game.py
+formatter.py
+i18n.py
+views.py
+requirements.txt
+README.md
+```
 
 ## Environment Variables
 
-Create a `.env` file for local development:
-```
+For Render, set this in the Environment Variables dashboard:
+
+```txt
 DISCORD_TOKEN=your_bot_token_here
 ```
 
-When deploying to Render, set `DISCORD_TOKEN` in the **Environment Variables** dashboard.
+Do not upload a real `.env` file to GitHub.
 
-## Deployment (Render)
+## Render Settings
 
 | Field | Value |
 |-------|-------|

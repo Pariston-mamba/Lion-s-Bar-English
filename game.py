@@ -49,14 +49,14 @@ class GameSession:
 
     def add_player(self, discord_id: int, display_name: str) -> tuple[bool, str]:
         if self.state != GameState.WAITING:
-            return False, "The game has already started. You cannot join now."
+            return False, "game_already_started"
         if len(self.players) >= 6:
-            return False, "Room is full. Maximum 6 players."
+            return False, "room_full"
         if any(p.discord_id == discord_id for p in self.players):
-            return False, "You are already in the room."
+            return False, "already_joined"
 
         self.players.append(Player(discord_id=discord_id, display_name=display_name))
-        return True, "Joined successfully."
+        return True, "joined_ok"
 
     def get_player(self, discord_id: int) -> Optional[Player]:
         return next((p for p in self.players if p.discord_id == discord_id), None)
@@ -88,33 +88,33 @@ class GameSession:
 
     def start_game(self) -> tuple[bool, str]:
         if len(self.players) < 2:
-            return False, "At least 2 players are required to start."
+            return False, "need_two_players"
         if self.state != GameState.WAITING:
-            return False, "The game has already started."
+            return False, "already_started"
 
         self.state = GameState.PLAYING
         random.shuffle(self.players)
         self.current_turn = 0
         self.reset_round()
-        return True, "Game started."
+        return True, "game_started_ok"
 
     def play_cards(self, player_id: int, card_indices: list[int]) -> tuple[bool, str]:
         player = self.get_player(player_id)
 
         if not player:
-            return False, "You are not a player in this game."
+            return False, "not_player"
         if self.get_current_player().discord_id != player_id:
-            return False, "It's not your turn yet."
+            return False, "not_your_turn"
         if not player.is_alive:
-            return False, "You have been eliminated."
+            return False, "eliminated"
         if not card_indices:
-            return False, "Please select at least 1 card."
+            return False, "select_at_least_one"
         if len(card_indices) > MAX_PLAY_CARDS:
-            return False, f"You can play at most {MAX_PLAY_CARDS} cards at once."
+            return False, "max_cards"
         if len(set(card_indices)) != len(card_indices):
-            return False, "Cannot select the same card twice."
+            return False, "duplicate_card"
         if any(i < 0 or i >= len(player.hand) for i in card_indices):
-            return False, "Invalid card index."
+            return False, "invalid_card_index"
 
         actual_cards = [player.hand[i] for i in sorted(card_indices)]
         for i in sorted(card_indices, reverse=True):
@@ -127,7 +127,7 @@ class GameSession:
             claimed_rank=self.table_rank,
             claimed_count=len(actual_cards),
         )
-        return True, "Cards played successfully."
+        return True, "cards_played_ok"
 
     def check_lie(self) -> bool:
         if not self.last_claim:
