@@ -225,15 +225,6 @@ class LionsBarCog(commands.Cog):
             await self._prompt_turn(interaction.channel, session)
             return
 
-        if len(contenders) == 1:
-            forced = contenders[0]
-            session.set_current_player(forced.discord_id)
-            await interaction.channel.send(
-                t(public_lang, "must_challenge", player_id=forced.discord_id),
-                view=DoubtView(self, forced.discord_id, allow_pass=False, lang=public_lang),
-            )
-            return
-
         session.advance_turn(skip_empty=True)
         doubter = session.get_current_player()
 
