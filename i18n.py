@@ -256,7 +256,6 @@ TEXT = {
         "play_no_session": "找不到遊戲。請用 `/create` 重新建立。",
         "cards_played": "出牌完成！",
         "all_others_out": "其他玩家都已出光手牌，本輪結束並重新發牌。",
-        "must_challenge": "<@{player_id}> 只剩你還有手牌，你必須質疑！",
         "doubt_prompt": "<@{player_id}> 你要 **質疑**，還是 **不質疑並輪到自己出牌**？",
         "nothing_to_challenge": "目前沒有可質疑的出牌。",
         "revealing": "翻牌！",
